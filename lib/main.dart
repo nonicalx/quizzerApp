@@ -25,10 +25,30 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Widget> scoreMarker = [
-    Icon(Icons.check, color: Colors.green),
-    Icon(Icons.close, color: Colors.red)
+  List<Widget> scoreMarker = [];
+
+  List questions = [
+    {"question": "Corona is real?", "answer": true},
+    {
+      "question": "Corona virus attacks the respiratory system?",
+      "answer": true
+    },
+    {"question": "Corona is air borne?", "answer": false},
+    {"question": "Corona can be gotten by touch?", "answer": true},
   ];
+
+  int qNum = 0;
+
+  void moveToNextQuestion() {
+    print(questions.length);
+    if (qNum < questions.length - 1) {
+      ++qNum;
+      print('q' + '$qNum');
+    } else {
+      qNum = questions.length - 1;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -41,7 +61,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                questions[qNum]['question'],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -66,6 +86,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
+                  moveToNextQuestion();
                   scoreMarker.add(Icon(
                     Icons.check,
                     color: Colors.green,
@@ -88,7 +109,13 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                setState(() {
+                  moveToNextQuestion();
+                  scoreMarker.add(Icon(
+                    Icons.close,
+                    color: Colors.red,
+                  ));
+                });
               },
             ),
           ),
