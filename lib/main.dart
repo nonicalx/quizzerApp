@@ -39,13 +39,22 @@ class _QuizPageState extends State<QuizPage> {
 
   int qNum = 0;
 
-  void moveToNextQuestion() {
-    print(questions.length);
-    if (qNum < questions.length - 1) {
+  void moveToNextQuestion(bool userAnswer) {
+    if (qNum < questions.length) {
+      if (questions[qNum]['answer'] == userAnswer) {
+        scoreMarker.add(Icon(
+          Icons.check,
+          color: Colors.green,
+        ));
+      } else if (questions[qNum]['answer'] != userAnswer) {
+        scoreMarker.add(Icon(
+          Icons.close,
+          color: Colors.red,
+        ));
+      }
       ++qNum;
-      print('q' + '$qNum');
     } else {
-      qNum = questions.length - 1;
+      qNum = 5;
     }
   }
 
@@ -61,7 +70,8 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[qNum]['question'],
+                questions[qNum < questions.length ? qNum : questions.length - 1]
+                    ['question'],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -86,11 +96,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  moveToNextQuestion();
-                  scoreMarker.add(Icon(
-                    Icons.check,
-                    color: Colors.green,
-                  ));
+                  moveToNextQuestion(true);
                 });
               },
             ),
@@ -110,11 +116,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  moveToNextQuestion();
-                  scoreMarker.add(Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ));
+                  moveToNextQuestion(false);
                 });
               },
             ),
